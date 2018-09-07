@@ -4,6 +4,7 @@ import hellfirepvp.modularmachinery.common.crafting.ComponentType;
 import hellfirepvp.modularmachinery.common.item.ItemBlockMachineComponent;
 import hellfirepvp.modularmachinery.common.item.ItemBlockMachineComponentCustomName;
 import modulardiversity.block.*;
+import modulardiversity.components.ComponentMana;
 import modulardiversity.components.ComponentMechanical;
 import modulardiversity.tile.*;
 import net.minecraft.block.Block;
@@ -39,15 +40,15 @@ public class Registry {
             registerBlock("blockemberinputhatch",emberInputHatch, new ItemBlockMachineComponentCustomName(emberInputHatch));
             registerBlock("blockemberoutputhatch",emberOutputHatch, new ItemBlockMachineComponentCustomName(emberOutputHatch));
         }
-
+		*/
         if(ModularDiversity.BotaniaLoaded) {
             BlockManaInputHatch manaInputHatch = new BlockManaInputHatch();
             BlockManaOutputHatch manaOutputHatch = new BlockManaOutputHatch();
 
-            registerBlock("blockmanainputhatch",manaInputHatch, new ItemBlockMachineComponent(manaInputHatch));
-            registerBlock("blockmanaoutputhatch",manaOutputHatch, new ItemBlockMachineComponent(manaOutputHatch));
+            registerBlock("blockmanainputhatch", manaInputHatch, new ItemBlockMachineComponent(manaInputHatch));
+            registerBlock("blockmanaoutputhatch", manaOutputHatch, new ItemBlockMachineComponent(manaOutputHatch));
         }
-
+        /*
         if(ModularDiversity.ImmersivePetroleumLoaded) {
             BlockJackHatch jackHatch = new BlockJackHatch();
 
@@ -76,10 +77,10 @@ public class Registry {
             BlockMechOutputHatch mechOutputHatch = new BlockMechOutputHatch(1);
             BlockMechOutputHatch mechSteelOutputHatch = new BlockMechOutputHatch(50);
 
-            registerBlock("blockmechcrankhatch",crankInputHatch, new ItemBlockMachineComponent(crankInputHatch));
-            registerBlock("blockmechinputhatch",mechInputHatch, new ItemBlockMachineComponent(mechInputHatch));
-            registerBlock("blockmechoutputhatch",mechOutputHatch, new ItemBlockMachineComponent(mechOutputHatch));
-            registerBlock("blockmechsteeloutputhatch",mechSteelOutputHatch, new ItemBlockMachineComponent(mechSteelOutputHatch));
+            registerBlock("blockmechcrankhatch", crankInputHatch, new ItemBlockMachineComponent(crankInputHatch));
+            registerBlock("blockmechinputhatch", mechInputHatch, new ItemBlockMachineComponent(mechInputHatch));
+            registerBlock("blockmechoutputhatch", mechOutputHatch, new ItemBlockMachineComponent(mechOutputHatch));
+            registerBlock("blockmechsteeloutputhatch", mechSteelOutputHatch, new ItemBlockMachineComponent(mechSteelOutputHatch));
         }
     }
 
@@ -118,10 +119,12 @@ public class Registry {
             registerTileEntity(TileEmberInputHatch.class);
             registerTileEntity(TileEmberOutputHatch.class);
         }
+        */
         if(ModularDiversity.BotaniaLoaded) {
             registerTileEntity(TileManaInputHatch.class);
             registerTileEntity(TileManaOutputHatch.class);
         }
+        /*
         if(ModularDiversity.ImmersivePetroleumLoaded) {
             registerTileEntity(TileJackHatch.class);
         }*/
@@ -143,6 +146,7 @@ public class Registry {
     @SubscribeEvent
     public static void registerComponents(ComponentType.ComponentRegistryEvent event) {
         ComponentType.Registry.register(new ComponentMechanical());
+        ComponentType.Registry.register(new ComponentMana());
     }
 
     @SubscribeEvent

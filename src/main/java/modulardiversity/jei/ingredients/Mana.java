@@ -5,11 +5,11 @@ import modulardiversity.jei.IFakeIngredient;
 public class Mana implements IFakeIngredient {
     float consumedMana;
 
-    public Mana(float consumedEmbers) {
-        this.consumedMana = consumedEmbers;
+    public Mana(float consumedMana) {
+        this.consumedMana = consumedMana;
     }
 
-    public float getConsumedEmbers() {
+    public float getConsumedMana() {
         return consumedMana;
     }
 

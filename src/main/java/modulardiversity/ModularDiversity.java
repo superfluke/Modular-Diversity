@@ -58,7 +58,6 @@ public class ModularDiversity
         configuration.load();
 
         configuration.getCategory("conversion_rates").setComment("Configure conversion rates of different power inputs.");
-        ManaToFE = configuration.get("conversion_rates","mana",10).getInt();
         EmberToFE = configuration.get("conversion_rates","ember",10).getInt();
         PressureToFE = configuration.get("conversion_rates","air_pressure",100).getInt();
         MJToFE = configuration.get("conversion_rates","mj",1000).getInt();

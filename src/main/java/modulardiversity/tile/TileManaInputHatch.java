@@ -21,6 +21,6 @@ public class TileManaInputHatch extends TileEntityMana implements IManaReceiver 
 
     @Override
     public boolean canRecieveManaFromBursts() {
-        return true;
+        return !isFull();
     }
 }

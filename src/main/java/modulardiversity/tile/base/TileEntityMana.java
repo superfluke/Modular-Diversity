@@ -6,6 +6,7 @@ import hellfirepvp.modularmachinery.common.tiles.base.TileColorableMachineCompon
 import hellfirepvp.modularmachinery.common.util.IEnergyHandler;
 import modulardiversity.ModularDiversity;
 import modulardiversity.block.prop.EmberHatchSize;
+import modulardiversity.components.MachineComponents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.MathHelper;
@@ -15,17 +16,20 @@ import teamroots.embers.power.EmberCapabilityProvider;
 import teamroots.embers.power.IEmberCapability;
 import vazkii.botania.api.mana.IManaBlock;
 import vazkii.botania.api.mana.IManaReceiver;
+import vazkii.botania.api.mana.ManaNetworkEvent;
 
 import javax.annotation.Nullable;
 
-public abstract class TileEntityMana extends TileColorableMachineComponent implements MachineComponentTile, IEnergyHandler, IManaReceiver {
+import betterwithmods.api.tile.IMechanicalPower;
+
+public abstract class TileEntityMana extends TileColorableMachineComponent implements MachineComponentTile, IManaReceiver {
     private int mana;
     private int capacity;
     private MachineComponent.IOType ioType;
 
     public TileEntityMana()
     {
-        capacity = 10000 * ModularDiversity.ManaToFE;
+        capacity = 1000000; //Mana pool sized capacity
     }
 
     public TileEntityMana(MachineComponent.IOType ioType) {
@@ -44,13 +48,18 @@ public abstract class TileEntityMana extends TileColorableMachineComponent imple
     public void writeCustomNBT(NBTTagCompound compound) {
         super.writeCustomNBT(compound);
         compound.setBoolean("input", this.ioType == MachineComponent.IOType.INPUT);
-        compound.setInteger("mana",mana);
+        compound.setInteger("mana", mana);
     }
 
     @Override
     @Nullable
     public MachineComponent provideComponent() {
-        return null;
+    	return new MachineComponents.ManaHatch(ioType) {
+            @Override
+            public IManaBlock getContainerProvider() {
+                return TileEntityMana.this;
+            }
+        };
     }
 
     public int getCapacity() {
@@ -58,35 +67,21 @@ public abstract class TileEntityMana extends TileColorableMachineComponent imple
     }
 
     public int getManaCapacity() {
-        return capacity / ModularDiversity.ManaToFE;
+        return capacity;
     }
 
     public void setMana(int mana) {
-        this.mana = mana * ModularDiversity.ManaToFE;
-    }
-
-    @Override
-    public int getCurrentEnergy() {
-        return mana;
-    }
-
-    @Override
-    public void setCurrentEnergy(int i) {
-        mana = MathHelper.clamp(i,0,capacity);
-    }
-
-    @Override
-    public int getMaxEnergy() {
-        return capacity;
+        this.mana = mana;
     }
 
     @Override
     public int getCurrentMana() {
-        return mana / ModularDiversity.ManaToFE;
+        return mana;
     }
 
     @Override
     public void recieveMana(int i) {
         setMana(MathHelper.clamp(getCurrentMana() + i,0,getManaCapacity()));
     }
+
 }
