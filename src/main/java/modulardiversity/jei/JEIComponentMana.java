@@ -4,8 +4,11 @@ import com.google.common.collect.Lists;
 import hellfirepvp.modularmachinery.common.crafting.helper.ComponentRequirement;
 import hellfirepvp.modularmachinery.common.integration.recipe.RecipeLayoutPart;
 import mezz.jei.api.ingredients.IIngredientRenderer;
+import modulardiversity.components.requirements.RequirementEmber;
 import modulardiversity.components.requirements.RequirementMana;
+import modulardiversity.jei.ingredients.Embers;
 import modulardiversity.jei.ingredients.Mana;
+import modulardiversity.jei.renderer.RendererEmber;
 import modulardiversity.jei.renderer.RendererMana;
 import net.minecraft.client.Minecraft;
 
@@ -35,7 +38,7 @@ public class JEIComponentMana extends ComponentRequirement.JEIComponent<Mana> {
     }
 
     @Override
-    public void onJEIHoverTooltip(int i, boolean b, Mana mana, List<String> list) {
+    public void onJEIHoverTooltip(int i, boolean b, Mana embers, List<String> list) {
     }
 
     public static class LayoutPart extends RecipeLayoutPart<Mana> {
@@ -45,12 +48,12 @@ public class JEIComponentMana extends ComponentRequirement.JEIComponent<Mana> {
 
         @Override
         public int getComponentWidth() {
-            return 16;
+            return 5;
         }
 
         @Override
         public int getComponentHeight() {
-            return 16;
+            return 63;
         }
 
         @Override

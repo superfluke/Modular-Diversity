@@ -3,13 +3,13 @@ package modulardiversity.jei.ingredients;
 import modulardiversity.jei.IFakeIngredient;
 
 public class Mana implements IFakeIngredient {
-    float consumedMana;
+    int consumedMana;
 
-    public Mana(float consumedMana) {
-        this.consumedMana = consumedMana;
+    public Mana(int consumedEmbers) {
+        this.consumedMana = consumedEmbers;
     }
 
-    public float getConsumedMana() {
+    public int getConsumedMana() {
         return consumedMana;
     }
 

@@ -33,13 +33,9 @@ public class ModularDiversity
     public static boolean BuildcraftLoaded;
     public static boolean BetterWithModsLoaded;
     public static boolean PneumaticCraftLoaded;
+    public static boolean ProdigyTechLoaded;
 
     Configuration configuration;
-
-    public static int ManaToFE;
-    public static int EmberToFE;
-    public static int PressureToFE;
-    public static int MJToFE;
 
     @SidedProxy(clientSide = "modulardiversity.ClientProxy",serverSide = "modulardiversity.ServerProxy")
     public static IProxy proxy;
@@ -53,14 +49,10 @@ public class ModularDiversity
         BetterWithModsLoaded = Loader.isModLoaded("betterwithmods");
         PneumaticCraftLoaded = Loader.isModLoaded("pneumaticcraft");
         BuildcraftLoaded = Loader.isModLoaded("buildcraftlib");
+        ProdigyTechLoaded = Loader.isModLoaded("prodigytech");
 
         configuration = new Configuration(event.getSuggestedConfigurationFile());
         configuration.load();
-
-        configuration.getCategory("conversion_rates").setComment("Configure conversion rates of different power inputs.");
-        EmberToFE = configuration.get("conversion_rates","ember",10).getInt();
-        PressureToFE = configuration.get("conversion_rates","air_pressure",100).getInt();
-        MJToFE = configuration.get("conversion_rates","mj",1000).getInt();
 
         if (configuration.hasChanged())
         {

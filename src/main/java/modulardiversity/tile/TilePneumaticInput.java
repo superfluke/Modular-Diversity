@@ -2,25 +2,26 @@ package modulardiversity.tile;
 
 import hellfirepvp.modularmachinery.common.machine.MachineComponent;
 import modulardiversity.ModularDiversity;
+import modulardiversity.components.MachineComponents;
+import modulardiversity.components.requirements.RequirementAir;
 import modulardiversity.tile.base.TileEntityPneumaticBase;
+import modulardiversity.util.ICraftingResourceHolder;
+
+import javax.annotation.Nullable;
 
 public class TilePneumaticInput extends TileEntityPneumaticBase {
     public TilePneumaticInput(int tier, int volume) {
         super(MachineComponent.IOType.INPUT, tier, volume);
     }
 
+    @Nullable
     @Override
-    public int getCurrentEnergy() {
-        return (int)(airHandler.getPressure() * ModularDiversity.PressureToFE);
-    }
-
-    @Override
-    public void setCurrentEnergy(int i) {
-        //NOOP
-    }
-
-    @Override
-    public int getMaxEnergy() {
-        return (int)(airHandler.getMaxPressure() * ModularDiversity.PressureToFE);
+    public MachineComponent provideComponent() {
+        return new MachineComponents.AirHatch(MachineComponent.IOType.INPUT) {
+            @Override
+            public ICraftingResourceHolder<RequirementAir.ResourceToken> getContainerProvider() {
+                return null;
+            }
+        };
     }
 }
