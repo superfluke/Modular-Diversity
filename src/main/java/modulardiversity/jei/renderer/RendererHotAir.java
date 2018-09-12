@@ -17,7 +17,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.util.math.MathHelper;
-import teamroots.embers.gui.GuiCodex;
 
 public class RendererHotAir implements IIngredientRenderer<HotAir> {
     private IDrawableStatic hot_air_empty;
@@ -53,10 +52,6 @@ public class RendererHotAir implements IIngredientRenderer<HotAir> {
     	GlStateManager.color(1F, 1F, 1F, alpha);
         hot_air_empty.draw(minecraft,x,y);
         int tempPercent = Math.max(0, (int) ((double) airTemp / (double) maxTemp*12));
-
-//        if(tempPercent == 0 && airTemp > 0)
-//        	tempPercent = 1;
-
         hot_air_fill.draw(minecraft,x,y);
 
         Color color_ = new Color(color);
@@ -64,6 +59,6 @@ public class RendererHotAir implements IIngredientRenderer<HotAir> {
         hot_air_fill.draw(minecraft,x,y, 0, MathHelper.clamp(tempPercent, 2, 16), 0, 0);
         GL11.glColor4ub((byte) 255, (byte) 255, (byte) 255, (byte) 255);
         
-        GuiCodex.drawTextGlowingAura(minecraft.fontRenderer, airTemp+"°", x, y+16);
+        //GuiCodex.drawTextGlowingAura(minecraft.fontRenderer, airTemp+"°", x, y+16);
     }
 }
