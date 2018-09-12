@@ -7,6 +7,7 @@ import modulardiversity.block.*;
 import modulardiversity.components.ComponentEmber;
 import modulardiversity.components.ComponentHotAir;
 import modulardiversity.components.ComponentLaser;
+import modulardiversity.components.ComponentLaser;
 import modulardiversity.components.ComponentMana;
 import modulardiversity.components.ComponentMechanical;
 import modulardiversity.tile.*;
