@@ -88,10 +88,10 @@ public class Registry {
         
         if(ModularDiversity.ProdigyTechLoaded) {
         	BlockHotAirInputHatch hotAirInputHatch = new BlockHotAirInputHatch();
-        	//BlockHotAirOutputHatch hotAirOuputHatch = new BlockHotAirOutputHatch();
+        	BlockHotAirOutputHatch hotAirOuputHatch = new BlockHotAirOutputHatch();
 
             registerBlock("blockhotairinputhatch", hotAirInputHatch, new ItemBlockMachineComponent(hotAirInputHatch));
-            //registerBlock("blockhotairoutputhatch",hotAirOuputHatch, new ItemBlockMachineComponent(hotAirOuputHatch));
+            registerBlock("blockhotairoutputhatch",hotAirOuputHatch, new ItemBlockMachineComponent(hotAirOuputHatch));
         }
     }
 
@@ -147,6 +147,7 @@ public class Registry {
         }
         if(ModularDiversity.ProdigyTechLoaded) {
         	registerTileEntity(TileHotAirInput.class);
+        	registerTileEntity(TileHotAirOutput.class);
         }
         /*if(ModularDiversity.PneumaticCraftLoaded) {
             registerTileEntity(TilePneumaticInput.class);

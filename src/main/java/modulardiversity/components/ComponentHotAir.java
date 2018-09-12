@@ -28,11 +28,11 @@ public class ComponentHotAir extends ComponentType<RequirementHotAir> {
     @Nonnull
     @Override
     public RequirementHotAir provideComponent(MachineComponent.IOType ioType, JsonObject requirement) {
-        if(requirement.has("temp") && requirement.get("temp").isJsonPrimitive() && requirement.get("temp").getAsJsonPrimitive().isNumber()) {
-            int requiredTemp = requirement.getAsJsonPrimitive("temp").getAsInt();
+        if(requirement.has("temperature") && requirement.get("temperature").isJsonPrimitive() && requirement.get("temperature").getAsJsonPrimitive().isNumber()) {
+            int requiredTemp = requirement.getAsJsonPrimitive("temperature").getAsInt();
             return new RequirementHotAir(ioType, requiredTemp);
         } else {
-            throw new JsonParseException("The ComponentType \'"+getRegistryName()+"\' expects a \'temp\'-entry that defines the required hot air temp!");
+            throw new JsonParseException("The ComponentType \'"+getRegistryName()+"\' expects a \'temperature\'-entry that defines the required hot air temperature!");
         }
     }
 }

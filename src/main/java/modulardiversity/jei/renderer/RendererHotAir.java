@@ -17,24 +17,25 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.util.math.MathHelper;
+import teamroots.embers.gui.GuiCodex;
 
 public class RendererHotAir implements IIngredientRenderer<HotAir> {
-    private IDrawableStatic mana_bar;
-    private IDrawableStatic mana_bar_fill;
+    private IDrawableStatic hot_air_empty;
+    private IDrawableStatic hot_air_fill;
 
     public RendererHotAir() {
     }
 
     private void registerDrawables() {
-        if (mana_bar == null)
-            mana_bar = JEIHelpers.GUI_HELPER.createDrawable(JEIHelpers.TEXTURE, 28, 0, 5, 63);
-        if (mana_bar_fill == null)
-            mana_bar_fill = JEIHelpers.GUI_HELPER.createDrawable(JEIHelpers.TEXTURE, 33, 0, 3, 61);
+        if (hot_air_empty == null)
+        	hot_air_empty = JEIHelpers.GUI_HELPER.createDrawable(JEIHelpers.TEXTURE, 0, 73, 10, 15);
+        if (hot_air_fill == null)
+        	hot_air_fill = JEIHelpers.GUI_HELPER.createDrawable(JEIHelpers.TEXTURE, 10, 73, 10, 15);
     }
 
     @Override
     public List<String> getTooltip(Minecraft minecraft, HotAir ingredient, ITooltipFlag tooltipFlag) {
-        return Lists.newArrayList("HotAir");
+        return Lists.newArrayList((int)ingredient.getTempRequired() + "°C Hot Air");
     }
 
     @Override
@@ -42,26 +43,27 @@ public class RendererHotAir implements IIngredientRenderer<HotAir> {
         registerDrawables();
 
         GlStateManager.enableAlpha();
-        Color color = new Color(Color.HSBtoRGB(0.55F, (float) Math.min(1F, Math.sin(System.currentTimeMillis() / 200D) * 0.5 + 1F), 1F));
+        Color color = new Color(Color.HSBtoRGB(0.18F, 0.18F, 0.50F));
         int airTemp = (int) (hotair != null ? hotair.getTempRequired() : 0);
-        renderManaBar(minecraft,xPosition,yPosition,color.getRGB(), 1.0f, airTemp, 10000);
+        renderFullOfHotAir(minecraft, xPosition, yPosition,color.getRGB(), (float)(Math.sin(System.currentTimeMillis() / 800D)+1)/8.0F + 0.75F, airTemp, 400);
         GlStateManager.disableAlpha();
     }
 
-    public void renderManaBar(Minecraft minecraft, int x, int y, int color, float alpha, int airTemp, int maxTemp) {
-        GlStateManager.color(1F, 1F, 1F, alpha);
-        mana_bar.draw(minecraft,x,y);
-        int mapTemp = 225; //TODO 
-        int tempPercent = Math.max(0, (int) ((double) airTemp / (double) maxTemp * 61));
+    public void renderFullOfHotAir(Minecraft minecraft, int x, int y, int color, float alpha, int airTemp, int maxTemp) {
+    	GlStateManager.color(1F, 1F, 1F, alpha);
+        hot_air_empty.draw(minecraft,x,y);
+        int tempPercent = Math.max(0, (int) ((double) airTemp / (double) maxTemp*12));
 
-        if(tempPercent == 0 && airTemp > 0)
-        	tempPercent = 1;
+//        if(tempPercent == 0 && airTemp > 0)
+//        	tempPercent = 1;
 
-        mana_bar_fill.draw(minecraft,x+1,y+1);
+        hot_air_fill.draw(minecraft,x,y);
 
         Color color_ = new Color(color);
         GL11.glColor4ub((byte) color_.getRed(), (byte) color_.getGreen(),(byte) color_.getBlue(), (byte) (255F * alpha));
-        mana_bar_fill.draw(minecraft,x+1,y+1, MathHelper.clamp(61 - tempPercent, 0, 61),0,0,0);
+        hot_air_fill.draw(minecraft,x,y, 0, MathHelper.clamp(tempPercent, 2, 16), 0, 0);
         GL11.glColor4ub((byte) 255, (byte) 255, (byte) 255, (byte) 255);
+        
+        GuiCodex.drawTextGlowingAura(minecraft.fontRenderer, airTemp+"°", x, y+16);
     }
 }

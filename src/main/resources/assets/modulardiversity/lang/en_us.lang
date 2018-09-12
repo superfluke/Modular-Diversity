@@ -27,4 +27,5 @@ tile.blockmechsteeloutputhatch.name=Steel Mechanical Output
 
 tile.blocklaserhatch.name=Laser Hatch
 
-tile.blockhotairinputhatch.name=Hot Air Hatch
+tile.blockhotairinputhatch.name=Hot Air Input Hatch
+tile.blockhotairoutputhatch.name=Hot Air Output Hatch
