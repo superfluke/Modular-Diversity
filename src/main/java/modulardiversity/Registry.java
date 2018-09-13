@@ -10,6 +10,7 @@ import modulardiversity.components.ComponentLaser;
 import modulardiversity.components.ComponentLaser;
 import modulardiversity.components.ComponentMana;
 import modulardiversity.components.ComponentMechanical;
+import modulardiversity.components.ComponentStarlight;
 import modulardiversity.tile.*;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -94,6 +95,12 @@ public class Registry {
             registerBlock("blockhotairinputhatch", hotAirInputHatch, new ItemBlockMachineComponent(hotAirInputHatch));
             registerBlock("blockhotairoutputhatch",hotAirOuputHatch, new ItemBlockMachineComponent(hotAirOuputHatch));
         }
+        
+        if(ModularDiversity.AstralSorceryLoaded) {
+        	BlockStarlightInputHatch starlightInputHatch = new BlockStarlightInputHatch();
+        	
+        	registerBlock("blockstarlightinputhatch", starlightInputHatch, new ItemBlockMachineComponent(starlightInputHatch));     
+        }
     }
 
     public static void registerBlockModels()
@@ -150,6 +157,9 @@ public class Registry {
         	registerTileEntity(TileHotAirInput.class);
         	registerTileEntity(TileHotAirOutput.class);
         }
+        if(ModularDiversity.AstralSorceryLoaded) {
+        	registerTileEntity(TileStarlightInput.class);
+        }
         /*if(ModularDiversity.PneumaticCraftLoaded) {
             registerTileEntity(TilePneumaticInput.class);
             registerTileEntity(TilePneumaticInputConsume.class);
@@ -164,6 +174,7 @@ public class Registry {
         ComponentType.Registry.register(new ComponentMana());
         ComponentType.Registry.register(new ComponentLaser());
         ComponentType.Registry.register(new ComponentHotAir());
+        ComponentType.Registry.register(new ComponentStarlight());
     }
 
     @SubscribeEvent

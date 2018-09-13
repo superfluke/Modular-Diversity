@@ -77,4 +77,15 @@ public class MachineComponents {
 
         public abstract void reset();
     }
+    
+    public static abstract class StarlightHatch extends MachineComponent<ICraftingResourceHolder<RequirementStarlight.ResourceToken>> {
+        public StarlightHatch(IOType ioType) {
+            super(ioType);
+        }
+
+        @Override
+        public ComponentType getComponentType() {
+            return ComponentType.Registry.getComponent("starlight");
+        }
+    }
 }
