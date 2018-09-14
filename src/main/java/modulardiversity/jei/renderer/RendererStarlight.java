@@ -34,7 +34,7 @@ public class RendererStarlight implements IIngredientRenderer<Starlight> {
 
     @Override
     public List<String> getTooltip(Minecraft minecraft, Starlight ingredient, ITooltipFlag tooltipFlag) {
-        return Lists.newArrayList((int)ingredient.getStarlightRequired() + "°C Hot Air");
+        return Lists.newArrayList((int)ingredient.getStarlightRequired() + " Starlight");
     }
 
     @Override
@@ -44,7 +44,7 @@ public class RendererStarlight implements IIngredientRenderer<Starlight> {
         GlStateManager.enableAlpha();
         Color color = new Color(Color.HSBtoRGB(0.18F, 0.18F, 0.50F));
         int airTemp = (int) (hotair != null ? hotair.getStarlightRequired() : 0);
-        renderFullOfHotAir(minecraft, xPosition, yPosition,color.getRGB(), (float)(Math.sin(System.currentTimeMillis() / 800D)+1)/8.0F + 0.75F, airTemp, 400);
+        renderFullOfHotAir(minecraft, xPosition, yPosition,color.getRGB(), (float)(Math.sin(System.currentTimeMillis() / 800D)+1)/8.0F + 0.75F, airTemp, 200);
         GlStateManager.disableAlpha();
     }
 

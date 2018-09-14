@@ -29,6 +29,7 @@ import modulardiversity.components.requirements.RequirementStarlight;
 import modulardiversity.components.requirements.RequirementStarlight.ResourceToken;
 import modulardiversity.tile.base.TileEntityStarlight;
 import modulardiversity.util.ICraftingResourceHolder;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -39,9 +40,11 @@ import net.minecraft.world.World;
 public class TileStarlightInput extends TileEntityStarlight implements IStarlightReceiver, ILinkableTile, ITickable{
 	private Set<BlockPos> sourcesToThis = new HashSet<>();
 	private boolean isFirstTick;
+	
 	public TileStarlightInput() {
 		super();
 		isFirstTick = true;
+		
 	}
 
 	@Nullable
@@ -57,8 +60,9 @@ public class TileStarlightInput extends TileEntityStarlight implements IStarligh
 
 	@Override
 	public boolean consume(ResourceToken token, boolean doConsume) {
-		// TODO Auto-generated method stub
-		return false;
+		if(getStarlight() >= token.getRequiredStarlight())
+			token.setRequiredStarlightMet();
+		return true;
 	}
 
 	@Override
@@ -68,7 +72,7 @@ public class TileStarlightInput extends TileEntityStarlight implements IStarligh
 	}
 	
 	private void receiveStarlight(IWeakConstellation type, double amount) {
-        setStarlight(amount * 200.0);
+        addStarlight(amount * 200.0);
     }
 
 	@Override
@@ -123,27 +127,31 @@ public class TileStarlightInput extends TileEntityStarlight implements IStarligh
 	@Override
 	public void update() {
 		if(isFirstTick) {
-			 if(world.isRemote) 
-				 return;
-			 WorldNetworkHandler handler = WorldNetworkHandler.getNetworkHandler(getWorld());
-			 handler.addTransmissionTile(this);
-			 IPrismTransmissionNode node = handler.getTransmissionNode(getPos());
-//			 if(node == null) {
-//	            AstralSorcery.log.warn("[AstralSorcery] Placed a network tile that didn't produce a network node! At: dim=" + tileNetwork.getWorld().provider.getDimension() + ", pos=" + tileNetwork.getPos());
-//	        } else if(node.needsUpdate()) {
-//	            StarlightUpdateHandler.getInstance().addNode(tileNetwork.getWorld(), node);
-//	        }
-			StarlightUpdateHandler.getInstance().addNode(getWorld(), node);
-			
+			addToStarlightNetwork();
 			isFirstTick = false;
 		}
 		
-		
+		setStarlight(0.0);
 	}
 	
-	//TODO on break remove from network
-
-
+	private void addToStarlightNetwork() {		
+		if(world.isRemote) 
+			return;
+		WorldNetworkHandler handler = WorldNetworkHandler.getNetworkHandler(getWorld());
+		handler.addTransmissionTile(this);
+		IPrismTransmissionNode node = handler.getTransmissionNode(getPos());
+		if(node != null)
+			StarlightUpdateHandler.getInstance().addNode(getWorld(), node);
+	}
+	
+	public void removeFromStarlightNetwork() {
+		WorldNetworkHandler handler = WorldNetworkHandler.getNetworkHandler(getWorld());
+        IPrismTransmissionNode node = handler.getTransmissionNode(getPos());
+        if(node != null)
+        	StarlightUpdateHandler.getInstance().removeNode(getTrWorld(), node);
+        handler.removeTransmission(this);
+	}
+	
 	public static class TransmissionReceiverInputHatch extends SimpleTransmissionReceiver {
 
         public TransmissionReceiverInputHatch(BlockPos thisPos) {

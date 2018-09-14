@@ -6,6 +6,7 @@ import modulardiversity.ModularDiversity;
 import modulardiversity.jei.ingredients.*;
 import modulardiversity.jei.renderer.RendererEmber;
 import modulardiversity.jei.renderer.RendererMechanical;
+import modulardiversity.jei.renderer.RendererStarlight;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.ArrayList;
@@ -28,5 +29,6 @@ public class JEIHelpers implements IModPlugin {
         registry.register(Mana.class, new ArrayList<>(), new FakeIngredientHelper<>(), new FakeIngredientRenderer<>());
         registry.register(Laser.class, new ArrayList<>(), new FakeIngredientHelper<>(), new FakeIngredientRenderer<>());
         registry.register(HotAir.class, new ArrayList<>(), new FakeIngredientHelper<>(), new FakeIngredientRenderer<>());
+        registry.register(Starlight.class, new ArrayList<>(), new FakeIngredientHelper<>(), new RendererStarlight());
     }
 }

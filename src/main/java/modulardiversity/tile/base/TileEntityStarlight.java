@@ -17,7 +17,7 @@ public abstract class TileEntityStarlight extends TileColorableMachineComponent 
 		this.starlight = starlight;
 	}
 	
-	public double getStarlight(double starlight) {
+	public double getStarlight() {
 		return starlight;
 	}
 	
