@@ -1,10 +1,9 @@
 package modulardiversity.tile;
 
-import java.util.HashSet;
+
+
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
@@ -15,13 +14,9 @@ import hellfirepvp.astralsorcery.common.starlight.WorldNetworkHandler;
 import hellfirepvp.astralsorcery.common.starlight.network.StarlightUpdateHandler;
 import hellfirepvp.astralsorcery.common.starlight.transmission.IPrismTransmissionNode;
 import hellfirepvp.astralsorcery.common.starlight.transmission.ITransmissionReceiver;
-import hellfirepvp.astralsorcery.common.starlight.transmission.TransmissionNetworkHelper;
 import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimpleTransmissionReceiver;
 import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry;
-import hellfirepvp.astralsorcery.common.starlight.transmission.registry.TransmissionClassRegistry.TransmissionProvider;
-import hellfirepvp.astralsorcery.common.tile.TileAltar.TransmissionReceiverAltar;
 import hellfirepvp.astralsorcery.common.util.MiscUtils;
-import hellfirepvp.astralsorcery.common.util.nbt.NBTHelper;
 import hellfirepvp.modularmachinery.common.machine.MachineComponent;
 import modulardiversity.ModularDiversity;
 import modulardiversity.components.MachineComponents;
@@ -29,16 +24,12 @@ import modulardiversity.components.requirements.RequirementStarlight;
 import modulardiversity.components.requirements.RequirementStarlight.ResourceToken;
 import modulardiversity.tile.base.TileEntityStarlight;
 import modulardiversity.util.ICraftingResourceHolder;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class TileStarlightInput extends TileEntityStarlight implements IStarlightReceiver, ILinkableTile, ITickable{
-	private Set<BlockPos> sourcesToThis = new HashSet<>();
+public class TileStarlightInput extends TileEntityStarlight implements ILinkableTile, IStarlightReceiver, ITickable{
 	private boolean isFirstTick;
 	
 	public TileStarlightInput() {
@@ -67,7 +58,6 @@ public class TileStarlightInput extends TileEntityStarlight implements IStarligh
 
 	@Override
 	public boolean generate(ResourceToken token, boolean doGenerate) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 	

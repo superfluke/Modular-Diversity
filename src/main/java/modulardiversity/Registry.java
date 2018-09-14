@@ -98,8 +98,10 @@ public class Registry {
         
         if(ModularDiversity.AstralSorceryLoaded) {
         	BlockStarlightInputHatch starlightInputHatch = new BlockStarlightInputHatch();
+        	BlockStarlightOutputHatch starlightOutputHatch = new BlockStarlightOutputHatch();
         	
-        	registerBlock("blockstarlightinputhatch", starlightInputHatch, new ItemBlockMachineComponent(starlightInputHatch));     
+        	registerBlock("blockstarlightinputhatch", starlightInputHatch, new ItemBlockMachineComponent(starlightInputHatch)); 
+        	registerBlock("blockstarlightoutputhatch", starlightOutputHatch, new ItemBlockMachineComponent(starlightOutputHatch)); 
         }
     }
 
@@ -159,6 +161,7 @@ public class Registry {
         }
         if(ModularDiversity.AstralSorceryLoaded) {
         	registerTileEntity(TileStarlightInput.class);
+        	registerTileEntity(TileStarlightOutput.class);
         }
         /*if(ModularDiversity.PneumaticCraftLoaded) {
             registerTileEntity(TilePneumaticInput.class);

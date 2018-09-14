@@ -4,7 +4,7 @@ import javax.annotation.Nullable;
 
 import hellfirepvp.modularmachinery.common.CommonProxy;
 import hellfirepvp.modularmachinery.common.block.BlockMachineComponent;
-import modulardiversity.tile.TileStarlightInput;
+import modulardiversity.tile.TileStarlightOutput;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -14,9 +14,9 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class BlockStarlightInputHatch extends BlockMachineComponent {
+public class BlockStarlightOutputHatch extends BlockMachineComponent {
 	
-    public BlockStarlightInputHatch() {
+    public BlockStarlightOutputHatch() {
         super(Material.IRON);
         setHardness(2F);
         setResistance(10F);
@@ -43,7 +43,7 @@ public class BlockStarlightInputHatch extends BlockMachineComponent {
     @Nullable
     @Override
     public TileEntity createTileEntity(World world, IBlockState state) {
-        return new TileStarlightInput();
+        return new TileStarlightOutput();
     }
 
     @Nullable
@@ -55,8 +55,8 @@ public class BlockStarlightInputHatch extends BlockMachineComponent {
 	@Override
 	public void breakBlock(World world, BlockPos pos, IBlockState state) {
 		TileEntity te = world.getTileEntity(pos);
-		if (te instanceof TileStarlightInput) {
-			((TileStarlightInput) te).removeFromStarlightNetwork();
+		if (te instanceof TileStarlightOutput) {
+			((TileStarlightOutput) te).removeFromStarlightNetwork();
 		}
 	}
 

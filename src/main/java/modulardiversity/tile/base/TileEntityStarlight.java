@@ -1,6 +1,5 @@
 package modulardiversity.tile.base;
 
-import hellfirepvp.astralsorcery.common.starlight.transmission.ITransmissionReceiver;
 import hellfirepvp.modularmachinery.common.tiles.base.MachineComponentTile;
 import hellfirepvp.modularmachinery.common.tiles.base.TileColorableMachineComponent;
 import modulardiversity.components.requirements.RequirementStarlight;
