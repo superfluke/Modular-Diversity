@@ -2,24 +2,35 @@ package modulardiversity.tile;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Nullable;
 
 import hellfirepvp.astralsorcery.common.auxiliary.link.ILinkableTile;
+import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
 import hellfirepvp.astralsorcery.common.starlight.IIndependentStarlightSource;
+import hellfirepvp.astralsorcery.common.block.network.BlockCollectorCrystalBase;
+import hellfirepvp.astralsorcery.common.constellation.ConstellationRegistry;
+import hellfirepvp.astralsorcery.common.constellation.IWeakConstellation;
 import hellfirepvp.astralsorcery.common.starlight.IStarlightSource;
 import hellfirepvp.astralsorcery.common.starlight.WorldNetworkHandler;
 import hellfirepvp.astralsorcery.common.starlight.network.StarlightUpdateHandler;
 import hellfirepvp.astralsorcery.common.starlight.transmission.IPrismTransmissionNode;
 import hellfirepvp.astralsorcery.common.starlight.transmission.ITransmissionSource;
+import hellfirepvp.astralsorcery.common.starlight.transmission.registry.SourceClassRegistry;
 import hellfirepvp.astralsorcery.common.starlight.transmission.TransmissionNetworkHelper;
+import hellfirepvp.astralsorcery.common.starlight.transmission.base.SimpleTransmissionSourceNode;
+import hellfirepvp.astralsorcery.common.starlight.transmission.base.crystal.IndependentCrystalSource;
+import hellfirepvp.astralsorcery.common.starlight.transmission.registry.SourceClassRegistry.SourceProvider;
 import hellfirepvp.modularmachinery.common.machine.MachineComponent;
+import modulardiversity.ModularDiversity;
 import modulardiversity.components.MachineComponents;
 import modulardiversity.components.requirements.RequirementStarlight;
 import modulardiversity.components.requirements.RequirementStarlight.ResourceToken;
 import modulardiversity.tile.base.TileEntityStarlight;
 import modulardiversity.util.ICraftingResourceHolder;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -109,20 +120,20 @@ public class TileStarlightOutput extends TileEntityStarlight implements ITickabl
 
 	@Override
 	public IIndependentStarlightSource provideNewSourceNode() {
-		// TODO Auto-generated method stub
-		return null;
+		return new StarlightProducer(0.7F);
+		//CrystalProperties cProps = new CrystalProperties(400, 100, 100, 0, -1);
+		//return new IndependentCrystalSource(cProps, null, true, false, BlockCollectorCrystalBase.CollectorCrystalType.ROCK_CRYSTAL);
+		//(IWeakConstellation) ConstellationRegistry.getConstellationByName("lucerna")
 	}
 
 	@Override
-	public ITransmissionSource provideSourceNode(BlockPos arg0) {
-		// TODO Auto-generated method stub
-		return null;
+	public ITransmissionSource provideSourceNode(BlockPos pos) {
+		return new SimpleTransmissionSourceNode(pos);
 	}
 
 	@Override
 	public BlockPos getLinkPos() {
-		// TODO Auto-generated method stub
-		return null;
+		return getTrPos();
 	}
 
 	@Override
@@ -174,5 +185,63 @@ public class TileStarlightOutput extends TileEntityStarlight implements ITickabl
         }
         return false;
 	}
+	
+	public class StarlightProducer implements IIndependentStarlightSource {
+		private float constantStarlightPower;
+		
+		public StarlightProducer(float power) {
+			constantStarlightPower = power;
+		}
+		@Override
+		public SourceProvider getProvider() {
+			return new Provider();
+		}
+
+		@Override
+		public IWeakConstellation getStarlightType() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public void informTileStateChange(IStarlightSource arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public float produceStarlightTick(World world, BlockPos pos) {
+			return constantStarlightPower;
+		}
+
+		@Override
+		public void readFromNBT(NBTTagCompound compound) {
+			this.constantStarlightPower = compound.getFloat("power");
+		}
+
+		@Override
+		public void threadedUpdateProximity(BlockPos arg0, Map<BlockPos, IIndependentStarlightSource> arg1) {	
+		}
+
+		@Override
+		public void writeToNBT(NBTTagCompound compound) {
+			compound.setFloat("power", constantStarlightPower);
+		}
+
+	}
+	
+	public class Provider implements SourceClassRegistry.SourceProvider {
+
+        @Override
+        public IIndependentStarlightSource provideEmptySource() {
+            return new StarlightProducer(0.7F);
+        }
+
+        @Override
+        public String getIdentifier() {
+            return ModularDiversity.MODID + ":TileStarlightOutput";
+        }
+
+    }
 
 }
