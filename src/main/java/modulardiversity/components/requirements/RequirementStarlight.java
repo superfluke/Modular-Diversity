@@ -13,15 +13,17 @@ import modulardiversity.util.IResourceToken;
 
 public class RequirementStarlight extends RequirementConsumePerTick<Starlight, RequirementStarlight.ResourceToken> {
 	public final double requiredStarlight;
+	public final int outputTime;
 	
-	public RequirementStarlight(IOType ioType, double requiredStarlight) {
+	public RequirementStarlight(IOType ioType, double requiredStarlight, int outputTime) {
 		super(Registry.getComponent("starlight"), ioType);
 		this.requiredStarlight = requiredStarlight;
+		this.outputTime = outputTime;
 	}
 	
 	@Override
     public ComponentRequirement deepCopy() {
-        return new RequirementStarlight(getActionType(), requiredStarlight);
+        return new RequirementStarlight(getActionType(), requiredStarlight, outputTime);
     }
 	
 	@Override
@@ -31,7 +33,7 @@ public class RequirementStarlight extends RequirementConsumePerTick<Starlight, R
 	
 	@Override
     protected ResourceToken emitConsumptionToken(RecipeCraftingContext context) {
-        return new ResourceToken(requiredStarlight);
+        return new ResourceToken(requiredStarlight, outputTime);
     }
 	
 	@Override
@@ -43,14 +45,20 @@ public class RequirementStarlight extends RequirementConsumePerTick<Starlight, R
 	
 	public static class ResourceToken implements IResourceToken {
         private double requiredStarlight;
+        private int outputTime;
         private boolean requiredStarlightMet;
 
-        public ResourceToken(double requiredStarlight) {
+        public ResourceToken(double requiredStarlight, int outputTime) {
             this.requiredStarlight = requiredStarlight;
+            this.outputTime = outputTime;
         }
 
         public double getRequiredStarlight() {
             return requiredStarlight;
+        }
+        
+        public int getOutputTime() {
+        	return outputTime;
         }
         
         public void setRequiredStarlightMet() {

@@ -1,10 +1,13 @@
 package modulardiversity.tile;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nullable;
+
+import com.google.common.collect.Lists;
 
 import hellfirepvp.astralsorcery.common.auxiliary.link.ILinkableTile;
 import hellfirepvp.astralsorcery.common.item.crystal.CrystalProperties;
@@ -37,13 +40,18 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
-public class TileStarlightOutput extends TileEntityStarlight implements ITickable, IStarlightSource, ILinkableTile{
+public class TileStarlightOutput extends TileEntityStarlight implements ITickable, IStarlightSource, ILinkableTile {
+	//TODO shift right click to unlink
 	private boolean isFirstTick;
 	private List<BlockPos> positions = new LinkedList<>();
 	private boolean needsUpdate = false;
 	private boolean linked;
+	private int outputTimer;
 	
 	public TileStarlightOutput() {
 		super();
@@ -71,7 +79,11 @@ public class TileStarlightOutput extends TileEntityStarlight implements ITickabl
 	public boolean generate(ResourceToken token, boolean doGenerate) {
 		token.setRequiredStarlightMet();
 		if(doGenerate)
+		{
+			outputTimer = token.getOutputTime();
 			setStarlight(token.getRequiredStarlight());
+			StarlightProducer.setStarlightPower((float) getStarlight());
+		}
 		return true;
 	}
 	
@@ -101,6 +113,16 @@ public class TileStarlightOutput extends TileEntityStarlight implements ITickabl
 			needsUpdate = true;
 			isFirstTick = false;
 		}
+		
+		if(outputTimer == 0 && getStarlight() > 0.0)
+		{
+			setStarlight(0.0);
+			StarlightProducer.setStarlightPower(0.0F);
+		}
+		
+		if(outputTimer > 0)
+			outputTimer--;
+		
 	}
 
 	@Override
@@ -125,10 +147,7 @@ public class TileStarlightOutput extends TileEntityStarlight implements ITickabl
 
 	@Override
 	public IIndependentStarlightSource provideNewSourceNode() {
-		return new StarlightProducer(0.7F, linked);
-		//CrystalProperties cProps = new CrystalProperties(400, 100, 100, 0, -1);
-		//return new IndependentCrystalSource(cProps, null, true, false, BlockCollectorCrystalBase.CollectorCrystalType.ROCK_CRYSTAL);
-		//(IWeakConstellation) ConstellationRegistry.getConstellationByName("lucerna")
+		return new StarlightProducer((float)getStarlight(), linked);
 	}
 
 	@Override
@@ -196,6 +215,18 @@ public class TileStarlightOutput extends TileEntityStarlight implements ITickabl
 	}
 	
 	@Override
+    public boolean onSelect(EntityPlayer player) {
+        if(player.isSneaking()) {
+            for (BlockPos linkTo : Lists.newArrayList(getLinkedPositions())) {
+                tryUnlink(player, linkTo);
+            }
+            player.sendMessage(new TextComponentTranslation("misc.link.unlink.all").setStyle(new Style().setColor(TextFormatting.GREEN)));
+            return false;
+        }
+        return true;
+    }
+	
+	@Override
     public void writeCustomNBT(NBTTagCompound compound) {
         super.writeCustomNBT(compound);
 
@@ -203,36 +234,45 @@ public class TileStarlightOutput extends TileEntityStarlight implements ITickabl
         for (BlockPos pos : positions) {
             NBTTagCompound tag = new NBTTagCompound();
             NBTHelper.writeBlockPosToNBT(pos, tag);
+            
             list.appendTag(tag);
         }
-        compound.setTag("linked", list);
-        compound.setBoolean("wasLinkedBefore", linked);
+        compound.setTag("linkedto", list);
+        compound.setBoolean("previouslylinked", linked);
+        compound.setInteger("outputtimer", outputTimer);
     }
 	
 	@Override
     public void readCustomNBT(NBTTagCompound compound) {
         super.readCustomNBT(compound);
+        
         positions.clear();
-
-        if(compound.hasKey("linked")) {
-            NBTTagList list = compound.getTagList("linked", 10);
+        if(compound.hasKey("linkedto")) {
+            NBTTagList list = compound.getTagList("linkedto", 10);
             for (int i = 0; i < list.tagCount(); i++) {
                 NBTTagCompound tag = list.getCompoundTagAt(i);
                 positions.add(NBTHelper.readBlockPosFromNBT(tag));
             }
         }
-
-        linked = compound.getBoolean("wasLinkedBefore");
+        System.out.println(Arrays.toString(positions.toArray()));
+        linked = compound.getBoolean("previouslylinked");
+        outputTimer = compound.getInteger("outputtimer");
+        needsUpdate = true;
     }
 	
 	public static class StarlightProducer implements IIndependentStarlightSource {
-		private float constantStarlightPower;
-		private boolean autoLink;
+		private static float starlightPower;
+		private static boolean autoLink;
 		
 		public StarlightProducer(float power, boolean autoLink) {
-			constantStarlightPower = power;
+			starlightPower = power;
 			this.autoLink = autoLink;
 		}
+		
+		public static void setStarlightPower(float power) {
+			starlightPower = power;
+		}
+		
 		@Override
 		public SourceClassRegistry.SourceProvider getProvider() {
 			return new Provider();
@@ -253,7 +293,7 @@ public class TileStarlightOutput extends TileEntityStarlight implements ITickabl
 
 		@Override
 		public float produceStarlightTick(World world, BlockPos pos) {
-			return constantStarlightPower;
+			return starlightPower;
 		}
 		
 		@Override
@@ -262,13 +302,13 @@ public class TileStarlightOutput extends TileEntityStarlight implements ITickabl
 
 		@Override
 		public void readFromNBT(NBTTagCompound compound) {
-			constantStarlightPower = compound.getFloat("power");
+			starlightPower = compound.getFloat("power");
 			autoLink = compound.getBoolean("autoLink");
 		}	
 
 		@Override
 		public void writeToNBT(NBTTagCompound compound) {
-			compound.setFloat("power", constantStarlightPower);
+			compound.setFloat("power", starlightPower);
 			compound.setBoolean("autolink", autoLink);
 		}
 		
