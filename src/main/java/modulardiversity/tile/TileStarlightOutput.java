@@ -46,7 +46,6 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
 public class TileStarlightOutput extends TileEntityStarlight implements ITickable, IStarlightSource, ILinkableTile {
-	//TODO shift right click to unlink
 	private boolean isFirstTick;
 	private List<BlockPos> positions = new LinkedList<>();
 	private boolean needsUpdate = false;
@@ -147,7 +146,7 @@ public class TileStarlightOutput extends TileEntityStarlight implements ITickabl
 
 	@Override
 	public IIndependentStarlightSource provideNewSourceNode() {
-		return new StarlightProducer((float)getStarlight(), linked);
+		return new StarlightProducer((float)getStarlight());
 	}
 
 	@Override
@@ -262,11 +261,9 @@ public class TileStarlightOutput extends TileEntityStarlight implements ITickabl
 	
 	public static class StarlightProducer implements IIndependentStarlightSource {
 		private static float starlightPower;
-		private static boolean autoLink;
 		
-		public StarlightProducer(float power, boolean autoLink) {
+		public StarlightProducer(float power) {
 			starlightPower = power;
-			this.autoLink = autoLink;
 		}
 		
 		public static void setStarlightPower(float power) {
@@ -286,9 +283,6 @@ public class TileStarlightOutput extends TileEntityStarlight implements ITickabl
 
 		@Override
 		public void informTileStateChange(IStarlightSource sauce) {
-			TileStarlightOutput te = MiscUtils.getTileAt(sauce.getTrWorld(), sauce.getTrPos(), TileStarlightOutput.class, true);
-			if(te != null)
-				autoLink = te.hasBeenLinked();
 		}
 
 		@Override
@@ -303,18 +297,16 @@ public class TileStarlightOutput extends TileEntityStarlight implements ITickabl
 		@Override
 		public void readFromNBT(NBTTagCompound compound) {
 			starlightPower = compound.getFloat("power");
-			autoLink = compound.getBoolean("autoLink");
 		}	
 
 		@Override
 		public void writeToNBT(NBTTagCompound compound) {
 			compound.setFloat("power", starlightPower);
-			compound.setBoolean("autolink", autoLink);
 		}
 		
 		@Override
 	    public boolean providesAutoLink() {
-	        return autoLink;
+			return false;
 	    }
 
 	}
@@ -323,7 +315,7 @@ public class TileStarlightOutput extends TileEntityStarlight implements ITickabl
 
         @Override
         public IIndependentStarlightSource provideEmptySource() {
-            return new StarlightProducer(0.0F, false);
+            return new StarlightProducer(0.0F);
         }
 
         @Override

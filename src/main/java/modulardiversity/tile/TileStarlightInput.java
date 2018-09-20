@@ -62,7 +62,7 @@ public class TileStarlightInput extends TileEntityStarlight implements ILinkable
 	}
 	
 	private void receiveStarlight(IWeakConstellation type, double amount) {
-        addStarlight(amount * 200.0);
+        addStarlight(amount);
     }
 
 	@Override

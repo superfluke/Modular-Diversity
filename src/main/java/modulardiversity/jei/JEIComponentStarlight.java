@@ -47,12 +47,12 @@ public class JEIComponentStarlight extends ComponentRequirement.JEIComponent<Sta
 
         @Override
         public int getComponentWidth() {
-            return 16;
+            return 28;
         }
 
         @Override
         public int getComponentHeight() {
-            return 16;
+            return 34;
         }
 
         @Override

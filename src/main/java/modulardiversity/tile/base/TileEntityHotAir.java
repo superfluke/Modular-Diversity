@@ -36,7 +36,6 @@ public abstract class TileEntityHotAir extends TileColorableMachineComponent imp
 
 	@Override
 	public boolean generate(ResourceToken token, boolean doGenerate) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 	

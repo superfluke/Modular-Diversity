@@ -3,7 +3,7 @@
   "defaults": {
     "textures": {
       "bg_all": "modularmachinery:blocks/blockcasing_plain",
-      "ov_all": "modulardiversity:blocks/overlay_starlight_input"
+      "ov_all": "modulardiversity:blocks/overlay_starlight_input2"
     },
     "model": "modularmachinery:blockmodel_overlay_all",
     "transform": "forge:default-block"

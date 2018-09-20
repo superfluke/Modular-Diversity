@@ -28,14 +28,19 @@ public class ComponentStarlight extends ComponentType<RequirementStarlight> {
     @Override
     public RequirementStarlight provideComponent(MachineComponent.IOType ioType, JsonObject requirement) {
         if(requirement.has("level") && requirement.get("level").isJsonPrimitive() && requirement.get("level").getAsJsonPrimitive().isNumber()) {
-            double requiredStarlight = requirement.getAsJsonPrimitive("level").getAsDouble();
-            int outputTime = 0; //TODO fix me bro
-            //if(ioType == IOType.OUTPUT && requirement.has("output_time") && requirement.get("output_time").isJsonPrimitive() && requirement.get("output_time").getAsJsonPrimitive().isNumber())
-            	outputTime = requirement.getAsJsonPrimitive("output_time").getAsInt();
-            //else
-            	//throw new JsonParseException("The ComponentType \'"+getRegistryName()+"\' expects a \'output_time\'-entry that defines the number of ticks to output starlight!");
+            int requiredStarlight = requirement.getAsJsonPrimitive("level").getAsInt();
+            int outputTime = 0; 
+            if(ioType == IOType.OUTPUT) {
+            	if(requirement.has("output_time") && requirement.get("output_time").isJsonPrimitive() && requirement.get("output_time").getAsJsonPrimitive().isNumber() ) {
+            		outputTime = requirement.getAsJsonPrimitive("output_time").getAsInt();
+            	} 
+            	else {
+            		throw new JsonParseException("The ComponentType \'"+getRegistryName()+"\' expects a \'output_time\'-entry that defines the number of ticks to output starlight!");
+            	}
+            }            	
             
-            return new RequirementStarlight(ioType, requiredStarlight, outputTime);
+            //starlight requirements given by players are 200x greater than actual output, keeping with how the starlight altars multiply input starlight by 200x
+            return new RequirementStarlight(ioType, requiredStarlight/200.0, outputTime);
         } else {
             throw new JsonParseException("The ComponentType \'"+getRegistryName()+"\' expects a \'level\'-entry that defines the required starlight!");
         }
